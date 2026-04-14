@@ -4,7 +4,7 @@ Dies ist eine webbasierte Lagerverwaltung für Aquaristik-Zusätze, optimiert f�
 
 ## 🚀 Live Demo
 Du kannst die App direkt hier testen: 
-`https://DEIN-NUTZERNAME.github.io/DEIN-REPO-NAME/](https://mwolf269-droid.github.io/Osci-Lager_web/`
+`https://mwolf269-droid.github.io/Osci-Lager_web/`
 
 ## ✨ Features
 - **Lagerbestand:** Überwachung von Korallenzusätzen, Traces und ICP-Tests.
