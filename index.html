@@ -36,11 +36,11 @@
 <div id="customProdModal" class="modal-overlay"><div class="modal-content"><h3>Eigenes Produkt</h3><input id="customProdName" placeholder="Name"><select id="customProdUnit" style="margin: 15px 0;"><option value="ml">ml</option><option value="g">g</option><option value="Stk">Stk</option></select><button class="big-btn btn-blue" onclick="ui.saveCustomProd()">SPEICHERN</button><button onclick="ui.closeModals()" class="nav-link" style="width:100%; margin-top:10px; border:none; background:none;">Abbrechen</button></div></div>
 
 <!-- SCRIPTE (REIHENFOLGE WICHTIG) -->
-<script src="config.js"></script>
-<script src="measuring.js"></script>
+<script src="config.js"></script>    <!-- WICHTIG: Zuerst die Produkte -->
+<script src="core.js"></script>      <!-- Dann das Speicher-System -->
+<script src="ui.js"></script>        <!-- Dann die Oberfläche -->
 <script src="import.js"></script>
-<script src="ui.js"></script>
-<script src="core.js"></script>
+<script src="measuring.js"></script>
 <script>window.onload = () => core.init();</script>
 </body>
 </html>
