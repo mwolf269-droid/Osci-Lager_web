@@ -1,55 +1,65 @@
+/* core.js - DEMO VERSION für GitHub Pages */
 const core = {
     stockData: {},
-    storageData: {},
-    r3: n => Math.round(parseFloat(n) * 1000) / 1000, // 3 Stellen (Logs/Bestand)
-    r2: n => Math.round(parseFloat(n) * 100) / 100,   // 2 Stellen (Wiegen)
+    storageData: {
+        used: 45,
+        total: 1024,
+        ssid: "Demo-WiFi",
+        ip: "192.168.178.50",
+        rssi: -55,
+        temp: 38.5
+    },
+    
+    r3: n => Math.round(parseFloat(n) * 1000) / 1000,
+    r2: n => Math.round(parseFloat(n) * 100) / 100,
     getSafeId: p => p.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, ''),
     getDt: () => new Date().toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit'}),
 
     async init() {
-        console.log("Core init...");
+        console.log("Demo-Core init (LocalStorage Mode)");
         await this.load();
         this.loadStatus();
-        if(typeof ui !== 'undefined') ui.checkBackupReminder();
-    },
-
-    async load() {
-        try {
-            const res = await fetch('/api/load');
-            this.stockData = await res.json();
-            if(document.getElementById('status')) document.getElementById('status').innerText = "● Synchronisiert";
-            if(typeof ui !== 'undefined') ui.renderTable();
-        } catch (e) {
-            console.error("Lagerdaten konnten nicht geladen werden", e);
-            if(document.getElementById('status')) document.getElementById('status').innerText = "● Verbindungsfehler";
+        if(typeof ui !== 'undefined') {
+            ui.checkBackupReminder();
+            ui.renderTable();
         }
     },
 
-    async loadStatus() {
-        try {
-            const res = await fetch('/api/status');
-            this.storageData = await res.json();
-            if(typeof ui !== 'undefined' && ui.updateManualSettings) ui.updateManualSettings();
-        } catch (e) { console.warn("Hardware-Status nicht erreichbar"); }
+    async load() {
+        // Simulation: Lade aus LocalStorage oder nutze Test-Daten
+        const saved = localStorage.getItem('osci_lager_demo_data');
+        if (saved) {
+            this.stockData = JSON.parse(saved);
+        } else {
+            // Standard-Testdaten beim ersten Start
+            this.stockData = {
+                "Natriumchlorid (NaCl)": { qty: 4500, h: [{v: 500, t: "01.04."}, {v: 450, t: "10.04."}] },
+                "Jod (I)": { qty: 15.5, h: [{v: 2.1, t: "05.04."}] },
+                "Fluor (F)": { qty: 800, h: [] },
+                "_config": { lastBackup: Date.now() }
+            };
+            this.save();
+        }
+        if(document.getElementById('status')) document.getElementById('status').innerText = "● Demo-Modus (Lokal)";
+    },
+
+    loadStatus() {
+        // Simulierter Hardware-Status
+        if(typeof ui !== 'undefined' && ui.updateManualSettings) ui.updateManualSettings();
     },
 
     async factoryReset() {
-        if (confirm("!!! ACHTUNG !!!\n\nAlle Lagerbestände und WLAN-Daten werden gelöscht!")) {
-            await fetch('/api/factory_reset', { method: "POST" });
+        if (confirm("Demo-Daten wirklich zurücksetzen?")) {
+            localStorage.removeItem('osci_lager_demo_data');
             location.reload();
         }
     },
 
     async save() {
-        try {
-            await fetch('/api/save', { 
-                method: "POST", 
-                headers: { "Content-Type": "application/json" }, 
-                body: JSON.stringify(this.stockData)
-            });
-            this.loadStatus();
-            if(typeof ui !== 'undefined') ui.renderTable();
-        } catch (e) { console.error("Speichern fehlgeschlagen", e); }
+        // Simulation: Speichere in LocalStorage
+        localStorage.setItem('osci_lager_demo_data', JSON.stringify(this.stockData));
+        console.log("Demo: Daten lokal gespeichert");
+        if(typeof ui !== 'undefined') ui.renderTable();
     },
 
     ensureProd(p) { if (!this.stockData[p]) this.stockData[p] = { qty: 0, h: [] }; },
