@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Handbuch & System - Osci-Lager Guide</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Spezifische Handbuch-Styles */
+        .manual-card { background: var(--card); padding: 30px; border-radius: 20px; width: 100%; max-width: 800px; border: 1px solid #2a2a2a; margin: 10px auto; line-height: 1.7; box-sizing: border-box; }
+        h1, h2 { color: var(--primary); text-align: center; }
+        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 40px; font-size: 1.4rem; text-align: left; }
+        h3 { color: #eee; margin-top: 25px; font-size: 1.1rem; }
+        .hl { color: var(--primary); font-weight: bold; }
+        
+        .feature-item { background: #1f1f1f; padding: 20px; border-radius: 12px; border: 1px solid #333; margin-top: 15px; overflow: hidden; }
+        .warn-box { background: rgba(255, 75, 43, 0.1); border: 1px solid #ff4b2b; padding: 15px; border-radius: 10px; color: #ffcccc; margin: 20px 0; }
+        
+        /* RAHMEN FÜR ANLEITUNGSBILDER */
+        .feature-item img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            border: 1px solid #444; 
+            margin: 15px 0; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            display: block;
+        }
+
+        /* SYSTEM BUTTONS */
+        .reset-btn { background: #2a1b1b; border: 1px solid var(--danger); color: var(--danger); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px; transition: 0.3s; }
+        .reset-btn:hover { background: var(--danger); color: white; }
+        
+        .bk-btn { background: #1b252a; border: 1px solid var(--primary); color: var(--primary); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: 0.3s; }
+        .bk-btn:hover { background: var(--primary); color: black; }
+
+        .wlan-btn { background: #1b2a1b; border: 1px solid var(--success); color: var(--success); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: 0.3s; }
+        .wlan-btn:hover { background: var(--success); color: black; }
+
+        /* NEU: DONATION SECTION */
+        .coffee-section {
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid #00457C;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .coffee-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0070ba, #003087);
+            color: white;
+            padding: 14px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: none;
+            margin-top: 10px;
+        }
+        .coffee-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 112, 186, 0.4);
+        }
+
+        .bug-section { background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(103, 58, 183, 0.1)); border: 1px solid var(--primary); padding: 20px; border-radius: 15px; margin-top: 40px; text-align: center; }
+        ul { padding-left: 20px; list-style-type: none; }
+        li { margin-bottom: 12px; position: relative; padding-left: 25px; }
+        li::before { content: '▹'; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-container"><img src="header.png" class="banner-img"></div>
+    
+    <!-- EINHEITLICHE NAVIGATION -->
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link">📦 Lager</a>
+        <a href="stats.html" class="nav-link">📈 Statistik</a>
+        <a href="import.html" class="nav-link">📊 Import</a>
+        <a href="measuring.html" class="nav-link">⚖️ Wiegen</a>
+        <a href="handbuch.html" class="nav-link active">📖 Hilfe</a>
+        <a href="changelog.html" class="nav-link">🛠️ Logs</a>
+    </nav>
+
+    <div class="manual-card">
+        <h1>Gerätestatus & System</h1>
+        
+        <div class="feature-item">
+            <h3 style="color:var(--primary); margin-top:0;">📡 Hardware-Monitor</h3>
+            <div id="manualStorageInfo" style="font-family:monospace; color:#ccc; font-size: 0.85rem; line-height: 1.8;">Lade Systemdaten...</div>
+            
+            <div style="margin-top:20px; border-top:1px solid #333; padding-top:20px;">
+                <!-- WLAN BUTTON -->
+                <button class="wlan-btn" onclick="ui.openWlanModal()">📶 WLAN KONFIGURIEREN / WECHSELN</button>
+
+                <!-- BACKUP BUTTONS -->
+                <button class="bk-btn" onclick="ui.downloadBackup()">📥 BACKUP HERUNTERLADEN (JSON)</button>
+                <button class="bk-btn" onclick="document.getElementById('restoreFile').click()">📤 BACKUP EINSPIELEN (RESTORE)</button>
+                <input type="file" id="restoreFile" style="display:none" accept=".json" onchange="ui.restoreBackup(event)">
+                
+                <!-- RESET BUTTON -->
+                <button class="reset-btn" onclick="core.factoryReset()">⚙️ AUF WERKSEINSTELLUNGEN ZURÜCKSETZEN</button>
+                <p style="font-size: 0.65rem; color: #555; margin-top: 8px; text-align: center;">Vorsicht: Löscht alle Bestände und WLAN-Daten!</p>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #333; margin: 40px 0;">
+
+        <h1>Dein Osci-Lager Guide</h1>
+        <p class="subtitle">Präzision für dein Riff – einfach und effizient.</p>
+
+        <p>Ein gesundes Aquarium braucht Beständigkeit. Das <span class="hl">Osci-Lager</span> sorgt dafür, dass du nie wieder vor leeren Flaschen stehst oder mühsam ml-Stände schätzen musst.</p>
+
+        <h2>📦 Das digitale Regal (Dashboard)</h2>
+        <p>Im Lager behältst du die volle Kontrolle über alle Zusätze:</p>
+        <ul>
+            <li><span class="hl">Zukauf (+):</span> Ein Klick auf das grüne Plus lässt dich vordefinierte Gebindegrößen sofort hinzufügen.</li>
+            <li><span class="hl">Entnahme (-):</span> Über das rote Minus gibst du individuelle Mengen ab. Das System berechnet den Restbestand in Echtzeit.</li>
+            <li><span class="hl">ICP-Ninja:</span> Ocean Checks ziehst du per Klick sofort ab. Schnell und unkompliziert.</li>
+            <li><span class="hl">Prognose:</span> Kleine Pfeile (↑ ↓ →) zeigen dir direkt neben dem Bestand, ob dein Verbrauch im Vergleich zur letzten Dosierung steigt oder sinkt.</li>
+        </ul>
+
+        <div class="warn-box">
+            <strong>Intelligente Warnung:</strong> Wenn ein Wert <span class="hl">rot blinkt</span>, reicht dein Vorrat statistisch gesehen für weniger als 5 deiner typischen Dosierungen aus.
+        </div>
+
+        <h2>📈 Statistik & Trend-Analyse</h2>
+        <p>Daten sind der Schlüssel zum Erfolg. Die App wertet deinen Verbrauch für dich aus:</p>
+        <ul>
+            <li><span class="hl">Verbrauchs-Graph:</span> Unter dem Punkt "Statistik" siehst du die letzten 12 Entnahmen als Verlaufskurve.</li>
+            <li><span class="hl">Trendlinie:</span> Die rote gestrichelte Linie im Graph zeigt dir die mathematische Tendenz. Steigt dein Dosierbedarf oder sinkt er?</li>
+        </ul>
+
+        <h2>📊 Der Import-Assistent</h2>
+        <p>Importiere deine Verbräuche ohne mühsames Abtippen. Kopiere einfach die Daten direkt in das Importfeld:</p>
+        
+        <div class="feature-item">
+            <h3>🛠️ Custom & Repair (Osci-Motion)</h3>
+            <p>Importiere einfach die Daten wie auf dem Bild unten, um deinen Verbrauch der Custom & Repair Lösung zu dokumentieren. Kopiere dazu die Ergebnistabelle (Namen und ml-Werte) aus dem Rechner.</p>
+            <img src="import_osci.png" alt="Osci Import">
+        </div>
+
+        <div class="feature-item">
+            <h3>📱 ReefManager App (OCR-Import)</h3>
+            <p>Du kannst aus der <span class="hl">ReefManager App</span> per Screenshot die Werte als "Text" kopieren. Nutze dazu die Texterkennung (OCR) deines Smartphones auf dem Screenshot deiner Dosierwerte.</p>
+            <img src="import_rm.png" alt="ReefManager Import">
+        </div>
+
+        <ul style="margin-top: 20px;">
+            <li><span class="hl">Der Jod-Fix:</span> Da das Kürzel "I" oft als "1" erkannt wird, korrigiert die App dies automatisch.</li>
+        </ul>
+
+        <h2>⚖️ Das Labor (Messstation)</h2>
+        <p>Nutze die Physik für 100% Präzision:</p>
+        <ul>
+            <li>Wähle dein Produkt und die Flaschengröße aus.</li>
+            <li>Stelle die Flasche auf eine Waage und gib das Gewicht in Gramm ein.</li>
+            <li>Die App berechnet über die <span class="hl">Dichte</span> den ml-Stand und überschreibt deinen Lagerbestand.</li>
+        </ul>
+
+        <div class="bug-section">
+            <h3 style="margin-top: 0; justify-content: center; display: flex;">🚀 Support & Entwicklung</h3>
+            <p>Hast du einen Fehler gefunden oder eine Idee für ein neues Feature?</p>
+            <a href="https://github.com/mwolf269-droid/osci-lager-repo/issues" target="_blank" style="color:var(--primary); font-weight:bold; text-decoration: underline;">
+                Bug oder Feature auf GitHub melden
+            </a>
+            <p style="margin-top: 15px; font-size: 0.7rem; color: #666;">Version 1.2.0 | Handbuch Stand: April 2026</p>
+        </div>
+
+        <!-- NEU: BUY ME A COFFEE / SPENDEN -->
+        <div class="coffee-section">
+            <h3 style="margin-top: 0; justify-content: center; display: flex; color: #fff;">☕ Buy me a Coffee</h3>
+            <p style="font-size: 0.9rem; color: #eee;">Dir gefällt dieses Tool? Ich freue mich riesig über eine kleine freiwillige Unterstützung für die Weiterentwicklung!</p>
+            <a href="https://www.paypal.com/paypalme/Wolf1992" target="_blank" class="coffee-btn">
+                <span>🥤</span> SPENDE VIA PAYPAL
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-container"><img src="footer.png" class="footer-img"></div>
+</div>
+
+<!-- WLAN MODAL (ZUM AUSWÄHLEN) -->
+<div id="wlanModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 style="color:var(--primary); margin-top:0;">WLAN-Eigenschaften</h3>
+        <p style="font-size:0.7rem; color:#888; margin-bottom:10px;">Verfügbare Netzwerke (Klick zum Wählen):</p>
+        <div id="wifiList" style="max-height: 150px; overflow-y: auto; margin-bottom: 15px; background: #000; border-radius: 8px; border: 1px solid #333;"></div>
+        <input type="text" id="wifiSSID" placeholder="WLAN Name (SSID)">
+        <input type="password" id="wifiPW" placeholder="Passwort">
+        <button id="btnSaveWlan" class="big-btn btn-blue" onclick="ui.saveWlan()" style="margin-top:10px;">SPEICHERN & NEUSTART</button>
+        <button onclick="ui.closeModals()" class="nav-link" style="width:100%; margin-top:10px; border:none; background:none; justify-content:center; color:#666;">Abbrechen</button>
+    </div>
+</div>
+
+<script src="config.js"></script>
+<script src="core.js"></script>
+<script src="ui.js"></script>
+<script>
+    window.onload = async () => { 
+        await core.init(); 
+        if(core.loadStatus) await core.loadStatus();
+    };
+</script>
+</body>
+</html>

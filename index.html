@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Osci-Motion Lagerverwaltung</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-container">
+    <div class="header-container"><img src="header.png" class="banner-img"></div>
+    <div id="backupReminder" style="display:none; background:var(--danger); color:white; padding:10px; border-radius:10px; text-align:center; margin-bottom:15px; font-weight:bold; font-size:0.8rem;">⚠️ Backup fällig! Bitte im Menü 'Hilfe' erstellen.</div>
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link active">📦 Lager</a>
+        <a href="stats.html" class="nav-link">📈 Statistik</a>
+        <a href="measuring.html" class="nav-link">⚖️ Wiegen</a>
+        <a href="import.html" class="nav-link">📊 Import</a>
+        <a href="handbuch.html" class="nav-link">📖 Hilfe</a>
+        <a href="changelog.html" class="nav-link">🛠️ Logs</a>
+    </nav>
+    <div id="status" class="status-bar">Verbinde...</div>
+    <div id="lagerContainer"></div>
+    <div class="footer-container">
+        <div id="espStorageInfo" style="color:#555; font-size:0.65rem; margin-bottom:10px; font-family: monospace;">Lade Daten...</div>
+        <img src="footer.png" class="footer-img">
+    </div>
+</div>
+
+<!-- MODALS -->
+<div id="addModal" class="modal-overlay"><div class="modal-content"><h3 id="addModalTitle" style="color:var(--primary); margin-top:0;">Zukauf</h3><div id="addModalOptions"></div><button onclick="ui.closeModals()" class="nav-link" style="width:100%; margin-top:15px; border:none; background:none; justify-content:center; color:#666; text-decoration: underline;">Abbrechen</button></div></div>
+<div id="addCustomVolModal" class="modal-overlay"><div class="modal-content"><h3 id="addCustomVolTitle" style="color:var(--success); margin-top:0;">Hinzufügen</h3><div style="position:relative;"><input type="number" id="addCustomInput" style="font-size:2.5rem; text-align:center; color:var(--primary); padding:15px;" placeholder="0.00"><span id="addCustomUnit" style="display:block; margin:10px 0; color:#444;">Einheit</span></div><button onclick="ui.confirmAddCustom()" class="big-btn btn-blue" style="margin-top:10px;">HINZUFÜGEN</button><button onclick="ui.closeModals()" class="nav-link" style="width:100%; margin-top:10px; border:none; background:none; justify-content:center;">Abbrechen</button></div></div>
+<div id="remModal" class="modal-overlay"><div class="modal-content"><h3 id="remModalTitle" style="color:var(--danger); margin-top:0;">Entnahme</h3><div style="position:relative;"><input type="number" id="remInput" style="font-size:2.5rem; text-align:center; color:var(--primary); padding:15px;" placeholder="0.00"><span id="modalUnit" style="display:block; margin:10px 0; color:#444;">ml</span></div><button onclick="ui.confirmRem()" class="big-btn btn-red" style="margin-top:10px;">ABZIEHEN</button><button onclick="ui.closeModals()" class="nav-link" style="width:100%; margin-top:10px; border:none; background:none; justify-content:center;">Abbrechen</button></div></div>
+<div id="customProdModal" class="modal-overlay"><div class="modal-content"><h3>Eigenes Produkt</h3><input id="customProdName" placeholder="Name"><select id="customProdUnit" style="margin: 15px 0;"><option value="ml">ml</option><option value="g">g</option><option value="Stk">Stk</option></select><button class="big-btn btn-blue" onclick="ui.saveCustomProd()">SPEICHERN</button><button onclick="ui.closeModals()" class="nav-link" style="width:100%; margin-top:10px; border:none; background:none;">Abbrechen</button></div></div>
+
+<!-- SCRIPTE (REIHENFOLGE WICHTIG) -->
+<script src="config.js"></script>
+<script src="measuring.js"></script>
+<script src="import.js"></script>
+<script src="ui.js"></script>
+<script src="core.js"></script>
+<script>window.onload = () => core.init();</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiegen - Osci Lager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-container">
+    <div class="header-container"><img src="header.png" class="banner-img"></div>
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link">📦 Lager</a>
+        <a href="stats.html" class="nav-link">📈 Statistik</a>
+        <a href="measuring.html" class="nav-link active">⚖️ Wiegen</a>
+        <a href="import.html" class="nav-link">📊 Import</a>
+        <a href="handbuch.html" class="nav-link">📖 Hilfe</a>
+        <a href="changelog.html" class="nav-link">🛠️ Logs</a>
+    </nav>
+    <div class="section-card">
+        <div class="section-header">⚖️ Produkt Wiegen</div>
+        <div style="padding:20px; display:flex; flex-direction:column; gap:15px;">
+            <select id="prodSelect"></select>
+            <div style="display: flex; gap: 10px;">
+                <select id="gebindeSelect" style="flex:1;">
+                    <option value="9.3">30ml (9,3g)</option>
+                    <option value="18.5">100ml (18,5g)</option>
+                    <option value="57" selected>1L (57g)</option>
+                    <option value="260">5L (260g)</option>
+                    <option value="440">10L (440g)</option>
+                </select>
+                <input type="number" id="weightInput" style="flex:1;" placeholder="Gramm Waage" oninput="measuring.calculate()">
+            </div>
+            <div style="background:#000; padding:20px; border-radius:12px; text-align:center; border:1px solid #333;">
+                <div id="calcResult" style="font-weight:bold; font-size: 3rem; color: var(--primary);">0</div>
+            </div>
+            <button class="big-btn btn-blue" onclick="measuring.updateStock()">ERGEBNIS ÜBERNEHMEN</button>
+        </div>
+    </div>
+    <div class="footer-container"><img src="footer.png" class="footer-img"></div>
+</div>
+<script src="config.js"></script><script src="core.js"></script><script src="ui.js"></script><script src="measuring.js"></script>
+<script>window.onload = async () => { await core.init(); measuring.fill(); };</script>
+</body>
+</html>
